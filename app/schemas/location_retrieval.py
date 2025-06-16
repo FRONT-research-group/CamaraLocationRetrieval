@@ -94,17 +94,25 @@ class AreaType(str,Enum):
     polygon = "POLYGON" # The area is defined as a polygon.
 
 
-class Area(BaseModel):
-    areaType = Optional[AreaType] = Field(None, description="Type of this area.")
+class Area(RootModel[AreaType]):
+    root: Annotated[
+        AreaType,
+        Field(description="""
+            Type of this area.
+            CIRCLE - The area is defined as a circle.
+            POLYGON - The area is defined as a polygon.
+            """)]
 
 class Point(BaseModel):
-    latitude: float = Field(..., description="Latitude component of a location.")
-    longitude: float = Field(..., description="Longitude component of location.")
+    latitude: Annotated[float,Field(description="Latitude component of a location.",examples=["50.735851"],ge=-90,le=90)]
+    longitude: Annotated[float,Field(..., description="Longitude component of location.",examples=["7.10066"],ge=-180,le=180)]
 
-class PointList(BaseModel):
-    pointList: list[Point] = Field(..., description="List of points defining the area.")
+class PointList(RootModel[Annotated[
+        List[Point],
+        Field(min_length=3,max_length=15, description="List of points defining the area.")]]):
+    pass
 
-class Circle(BaseModel):
+class Circle(8):
     center: Point = Field(..., description="Center point of the circle.")
     radius: float = Field(..., description="Radius of the circle.")
 
