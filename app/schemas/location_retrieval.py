@@ -1,4 +1,4 @@
-from typing import Optional, List, Annotated, Literal
+from typing import Annotated, Literal
 from enum import Enum
 from datetime import datetime
 
@@ -97,9 +97,9 @@ class RetrievalLocationRequest(BaseModel):
     """
     Request to retrieve the location of a device. Device is not required when using a 3-legged access token.
     """
-    device: Annotated[Optional[Device], Field(None,description="End-user device able to connect to a mobile network.")]
-    maxAge: Annotated[Optional[int], Field(None, description="Maximum age of the location information which is accepted for the location retrieval (in seconds).")]
-    maxSurface: Annotated[Optional[int], Field(None,description="Maximum surface in square meters which is accepted by the client for the location retrieval.",ge=1,examples=[1000000])]
+    device: Annotated[Device | None, Field(None,description="End-user device able to connect to a mobile network.")]
+    maxAge: Annotated[int | None, Field(None, description="Maximum age of the location information which is accepted for the location retrieval (in seconds).")]
+    maxSurface: Annotated[int | None, Field(None,description="Maximum surface in square meters which is accepted by the client for the location retrieval.",ge=1,examples=[1000000])]
 
 
 class AreaType(str,Enum):
@@ -121,7 +121,7 @@ class Point(BaseModel):
     longitude: Annotated[float,Field(..., description="Longitude component of location.",examples=["7.10066"],ge=-180,le=180)]
 
 class PointList(RootModel[Annotated[
-        List[Point],
+        list[Point],
         Field(min_length=3,max_length=15, description="List of points defining the area.")]]):
     pass
 
