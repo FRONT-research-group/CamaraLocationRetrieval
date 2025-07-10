@@ -126,15 +126,19 @@ class PointList(RootModel[Annotated[
     pass
 
 class Circle(Area):
+    areaType: Literal[AreaType.circle]
     center: Annotated[Point, Field(description="Center point of the circle.")]
     radius: Annotated[float,Field(description="Radius of the circle.",ge=1)]
 
 class Polygon(Area):
+    areaType: Literal[AreaType.polygon]
     boundary: Annotated[PointList, Field(description="List of points defining the polygon.")]
+
+Area = Annotated[Circle | Polygon, Field(discriminator="areaType")]
 
 class LastLocationTime(RootModel[Annotated[
         datetime, 
-        Field( description="Last date and time when the device was localized.",examples="2023-09-07T10:40:52Z")]]):
+        Field(description="Last date and time when the device was localized.",examples="2023-09-07T10:40:52Z")]]):
     pass
 
 class Location(BaseModel):
