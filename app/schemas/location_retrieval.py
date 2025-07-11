@@ -106,16 +106,6 @@ class AreaType(str,Enum):
     circle = "CIRCLE" # The area is defined as a circle.
     polygon = "POLYGON" # The area is defined as a polygon.
 
-
-class Area(RootModel[Annotated[
-        AreaType,
-        Field(description="""
-            Type of this area.
-            CIRCLE - The area is defined as a circle.
-            POLYGON - The area is defined as a polygon.
-            """)]]):
-    pass
-
 class Point(BaseModel):
     latitude: Annotated[float,Field(description="Latitude component of a location.",examples=["50.735851"],ge=-90,le=90)]
     longitude: Annotated[float,Field(..., description="Longitude component of location.",examples=["7.10066"],ge=-180,le=180)]
@@ -125,12 +115,12 @@ class PointList(RootModel[Annotated[
         Field(min_length=3,max_length=15, description="List of points defining the area.")]]):
     pass
 
-class Circle(Area):
+class Circle(BaseModel):
     areaType: Literal[AreaType.circle]
     center: Annotated[Point, Field(description="Center point of the circle.")]
     radius: Annotated[float,Field(description="Radius of the circle.",ge=1)]
 
-class Polygon(Area):
+class Polygon(BaseModel):
     areaType: Literal[AreaType.polygon]
     boundary: Annotated[PointList, Field(description="List of points defining the polygon.")]
 
@@ -138,7 +128,7 @@ Area = Annotated[Circle | Polygon, Field(discriminator="areaType")]
 
 class LastLocationTime(RootModel[Annotated[
         datetime, 
-        Field(description="Last date and time when the device was localized.",examples="2023-09-07T10:40:52Z")]]):
+        Field(description="Last date and time when the device was localized.",examples=["2023-09-07T10:40:52Z"])]]):
     pass
 
 class Location(BaseModel):

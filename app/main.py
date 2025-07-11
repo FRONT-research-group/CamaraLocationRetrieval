@@ -9,7 +9,7 @@ settings = get_settings()
 
 app = FastAPI()
 
-app.include_router(location_retrieval.router,prefix="location-retrieval/v0.4",tags=["Location retrieval"])
+app.include_router(location_retrieval.router,prefix="/location-retrieval/v0.4",tags=["Location retrieval"])
 
 if __name__ == "__main__":
     import uvicorn

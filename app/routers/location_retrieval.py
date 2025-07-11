@@ -2,7 +2,7 @@ import uuid
 from fastapi import APIRouter, Response, status, Request
 
 from app.schemas.location_retrieval import RetrievalLocationRequest, Location
-from app.services.location_retrieval_tf import create_monitoring_event_subscription
+from app.services.location_retrieval_tf import retrieve_location_info
 router = APIRouter()
 
 
@@ -20,4 +20,4 @@ async def retrieve_location(request: Request, sub_req: RetrievalLocationRequest,
         x_correlator_id = uuid.uuid4()
         response.headers["x-correlator"] = str(x_correlator_id)
 
-    return create_monitoring_event_subscription(sub_req)
+    return retrieve_location_info(sub_req)
