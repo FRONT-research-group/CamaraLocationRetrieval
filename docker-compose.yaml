@@ -1,0 +1,12 @@
+services:
+  camara-location-retrieval:
+    build:
+      context: .
+    container_name: camara-location-retrieval
+    ports:
+      - "8080:8080"
+    env_file: ./app/.env
+    volumes:
+      - ./app:/app
+    restart: no
+    command: ["--host", "${HOST}", "--port", "${PORT}"]

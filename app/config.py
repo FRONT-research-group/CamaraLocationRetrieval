@@ -1,4 +1,4 @@
-from pydantic_settings import BaseSettings
+from pydantic_settings import BaseSettings, SettingsConfigDict
 
 class Settings(BaseSettings):
     host: str = "127.0.0.1"
@@ -9,6 +9,8 @@ class Settings(BaseSettings):
     scs_as_id: str = "1"
     location_type: str = "last_known" #last_known or current_location
     notification_destination: str | None = "http://127.0.0.1:8001"
+
+    model_config = SettingsConfigDict(env_ignore_empty=True)
 
 settings = Settings()
 
