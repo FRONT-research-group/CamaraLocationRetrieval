@@ -3,6 +3,9 @@ import requests
 from pydantic import BaseModel
 
 from app.utils.exception_errors import CoreHttpError
+from app.utils.logger import get_app_logger
+
+log = get_app_logger()
 
 APPLICATION_JSON = "application/json"
 
@@ -18,6 +21,7 @@ def _make_request(method: str, url: str, data=None):
             headers = {
                 "accept": APPLICATION_JSON,
             }
+        log.info(f"Making {method} request to {url} with headers {headers} and data {data}")
         response = requests.request(method, url, headers=headers, data=data)
         response.raise_for_status()
         if response.content:

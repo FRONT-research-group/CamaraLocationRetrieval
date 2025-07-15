@@ -41,6 +41,7 @@ def retrieve_location_info(
     subscription = build_monitoring_event_subscription(
         retrieve_location_request
     )
+    
     response = monitoring_event_post_request(
         settings.base_url, settings.scs_as_id, subscription
     )
