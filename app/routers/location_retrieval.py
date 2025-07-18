@@ -1,7 +1,7 @@
 import uuid
 from fastapi import APIRouter, Response, status, Request
 
-from app.utils.exception_errors import CoreHttpError
+# from app.utils.exception_errors import CoreHttpError
 from app.schemas.location_retrieval import RetrievalLocationRequest, Location, BadRequestError, UnauthorizedError,ForbiddenError,NotFound404,UnprocessableEntityError
 from app.services.location_retrieval_tf import retrieve_location_info
 from app.utils.logger import get_app_logger
@@ -33,8 +33,8 @@ async def retrieve_location(request: Request, sub_req: RetrievalLocationRequest,
         x_correlator_id = uuid.uuid4()
         response.headers["x-correlator"] = str(x_correlator_id)
 
-    try:
+    # try:
         return retrieve_location_info(sub_req)
-    except CoreHttpError as e:
-        log.error(f"Core HTTP error occurred: {e}")
-        return response
+    # except CoreHttpError as e:
+    #     log.error(f"Core HTTP error occurred: {e}")
+    #     return response

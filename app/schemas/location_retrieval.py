@@ -4,7 +4,7 @@ from datetime import datetime
 
 from ipaddress import IPv4Address, IPv6Address
 
-from pydantic import BaseModel, Field, RootModel, model_validator
+from pydantic import BaseModel, Field, RootModel, model_validator,ConfigDict
 
 
 class PhoneNumber(RootModel[Annotated[
@@ -101,6 +101,7 @@ class RetrievalLocationRequest(BaseModel):
     maxAge: Annotated[int | None, Field(None, description="Maximum age of the location information which is accepted for the location retrieval (in seconds).")]
     maxSurface: Annotated[int | None, Field(None,description="Maximum surface in square meters which is accepted by the client for the location retrieval.",ge=1,examples=[1000000])]
 
+    model_config = ConfigDict(extra="forbid")
 
 class AreaType(str,Enum):
     circle = "CIRCLE" # The area is defined as a circle.
