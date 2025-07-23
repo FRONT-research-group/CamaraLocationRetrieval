@@ -26,7 +26,7 @@ router = APIRouter()
             status.HTTP_422_UNPROCESSABLE_ENTITY: {"model": UnprocessableEntityError, "description": "Unprocessable Entity"}
         },
         response_model_exclude_unset=True)
-async def retrieve_location(request: Request, sub_req: RetrievalLocationRequest, response: Response) -> None:
+async def retrieve_location(request: Request, sub_req: RetrievalLocationRequest, response: Response) -> Location | None:
     if(request.headers.get("x-correlator")):
         response.headers["x-correlator"] = request.headers.get("x-correlator")
     else:

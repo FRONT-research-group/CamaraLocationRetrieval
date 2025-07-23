@@ -20,7 +20,7 @@ from app.utils.tf_helper_for_camara_loc import (
     build_camara_area
 )
 from app.config import get_settings
-from app.utils.exception_errors import NetworkPlatformError
+from app.utils.errors.exception_errors import NetworkPlatformError
 
 log = get_app_logger()
 settings = get_settings()

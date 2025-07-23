@@ -4,7 +4,7 @@ from app.routers import location_retrieval
 
 from app.config import get_settings
 from app.utils.logger import get_app_logger
-
+from app.dependencies import init_custom_exc_handlers
 
 settings = get_settings()
 
@@ -18,7 +18,10 @@ logger.info(f"SCS AS ID: {settings.scs_as_id}")
 logger.info(f"Location Type: {settings.location_type}")
 logger.info(f"Notification Destination: {settings.notification_destination}")
 
+
 app = FastAPI()
+
+init_custom_exc_handlers(app)
 
 app.include_router(location_retrieval.router,prefix="/location-retrieval/v0.4",tags=["Location retrieval"])
 

@@ -2,7 +2,7 @@
 import requests
 from pydantic import BaseModel
 
-from app.utils.exception_errors import CoreHttpError
+from app.utils.errors.exception_errors import CoreHttpError
 from app.utils.logger import get_app_logger
 
 log = get_app_logger()
