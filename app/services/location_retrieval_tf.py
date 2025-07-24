@@ -20,7 +20,7 @@ from app.utils.tf_helper_for_camara_loc import (
     build_camara_area
 )
 from app.config import get_settings
-from app.utils.errors.exception_errors import NetworkPlatformError
+from app.utils.errors.exception_errors import LocationInfoNotFoundException
 
 log = get_app_logger()
 settings = get_settings()
@@ -51,7 +51,7 @@ def retrieve_location_info(
         log.error(
             "Failed to retrieve location information from monitoring event report"
         )
-        raise NetworkPlatformError(
+        raise LocationInfoNotFoundException(
             "Location information not found in monitoring event report"
         )
     

@@ -6,6 +6,8 @@ class CoreHttpError(Exception):
 
 class NetworkPlatformError(Exception):
     pass
+class LocationInfoNotFoundException(Exception):
+    pass
 
 class BadRequestException(HTTPException):
     def __init__(self, bad_request_error: BadRequestError):
