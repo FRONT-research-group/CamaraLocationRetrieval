@@ -1,5 +1,5 @@
 from datetime import datetime, timedelta, timezone
-
+from app.services.map_render import create_map
 
 from app.schemas.location_retrieval import (   
     Area,
@@ -63,4 +63,7 @@ def build_camara_area(monitoring_event_report: MonitoringEventReport) -> Area:
     )
 
     log.info(f"Extracted camara-specific area value: {area}")
+
+    create_map(camara_point_list)
+
     return area
