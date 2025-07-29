@@ -5,7 +5,8 @@ This project bridges device location data with CAMARA Location API for seamless 
 ## Features
 
 - **Camara LocationRetrieval API:** This service provides an endpoint that renders the location of a UE connected to 5G Core as a polygon shape resolution.  
-- **Flexible Deployment:** Supports deployment via Docker Compose
+- **Flexible Deployment:** Supports deployment via Docker Compose.
+- **Map Rendering:** Creates a HTML file illustrating the polygon's schema location to a map.
 
 ## Getting Started
 ### Prerequisites
@@ -22,6 +23,7 @@ cd CamaraLocationRetrieval
 1. Build and start service:
    `docker compose up --build`
 2. The service will be available at `http://localhost:8080`
+3. For *HTML Page*: `docker cp` the HTML file into your local host.
 
 ## API Documentation
 The **Camara Location Retrieval API** is documented in the [openAPI spec](https://github.com/FRONT-research-group/CamaraLocationRetrieval/blob/implement_camara_api_2/location_retrieval_openapi.yaml).\
