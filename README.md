@@ -37,7 +37,7 @@ Also a `setup.sh` script is provided to create a `.env` file.
 Contributions are welcome! Please open issues or submit pull requests for improvements.
 
 ## License
-This project is licensed under the [Apache License 2.0](https://github.com/FRONT-research-group/CamaraLocationRetrieval/blob/implement_camara_api_2/LICENSE).
+This project is licensed under the [Apache License 2.0](https://github.com/FRONT-research-group/CamaraLocationRetrieval/blob/main/LICENSE).
 
 ## Contact
 For questions or support, contact: p.pavlidis@iit.demokritos.gr
