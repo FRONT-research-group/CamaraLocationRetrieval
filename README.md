@@ -26,7 +26,7 @@ cd CamaraLocationRetrieval
 3. For *HTML Page*: `docker cp` the HTML file into your local host.
 
 ## API Documentation
-The **Camara Location Retrieval API** is documented in the [openAPI spec](https://github.com/FRONT-research-group/CamaraLocationRetrieval/blob/implement_camara_api_2/location_retrieval_openapi.yaml).\
+The **Camara Location Retrieval API** is documented in the [openAPI spec](https://github.com/FRONT-research-group/CamaraLocationRetrieval/blob/main/location_retrieval_openapi.yaml).\
 Supported Error Types: 400 BAD REQUEST, 404 DEVICE IDENTIFIER NOT FOUND
 
 ## Configuration
