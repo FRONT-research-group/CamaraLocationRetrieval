@@ -125,7 +125,7 @@ class Polygon(BaseModel):
     areaType: Literal[AreaType.polygon]
     boundary: Annotated[PointList, Field(description="List of points defining the polygon.")]
 
-Area = Annotated[Circle | Polygon, Field(discriminator="areaType")]
+Area = Annotated[Polygon | Circle, Field(discriminator="areaType")]
 
 class LastLocationTime(RootModel[Annotated[
         datetime, 
