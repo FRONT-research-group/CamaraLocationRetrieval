@@ -1,0 +1,426 @@
+﻿openapi: 3.1.0
+info:
+  title: FastAPI
+  version: 0.1.0
+paths:
+  /location-retrieval/v0.4/retrieve:
+    post:
+      tags:
+        - Location retrieval
+      summary: Retrieve Location
+      description: Retrieve the area where a certain user device is localized.
+      operationId: retrieve_location_location_retrieval_v0_4_retrieve_post
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RetrievalLocationRequest'
+        required: true
+      responses:
+        '200':
+          description: Location retrieval result
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Location'
+                anyOf:
+                  - $ref: '#/components/schemas/Location'
+                  - type: 'null'
+                title: >-
+                  Response Retrieve Location Location Retrieval V0 4 Retrieve
+                  Post
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BadRequestError'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UnauthorizedError'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ForbiddenError'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NotFound404'
+        '422':
+          description: Unprocessable Entity
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UnprocessableEntityError'
+components:
+  schemas:
+    BadRequestError:
+      properties:
+        status:
+          type: integer
+          const: 400
+          title: Status
+        code:
+          type: string
+          const: INVALID_ARGUMENT
+          title: Code
+        message:
+          type: string
+          const: 'Client specified an invalid argument, request body or query param.'
+          title: Message
+      type: object
+      required:
+        - status
+        - code
+        - message
+      title: BadRequestError
+    Circle:
+      properties:
+        areaType:
+          type: string
+          const: CIRCLE
+          title: Areatype
+        center:
+          $ref: '#/components/schemas/Point'
+          description: Center point of the circle.
+        radius:
+          type: number
+          minimum: 1
+          title: Radius
+          description: Radius of the circle.
+      type: object
+      required:
+        - areaType
+        - center
+        - radius
+      title: Circle
+    Device:
+      properties:
+        phoneNumber:
+          anyOf:
+            - $ref: '#/components/schemas/PhoneNumber'
+            - type: 'null'
+        networkAccessIdentifier:
+          anyOf:
+            - $ref: '#/components/schemas/NetworkAccessIdentifier'
+            - type: 'null'
+        ipv4Address:
+          anyOf:
+            - $ref: '#/components/schemas/DeviceIpv4Addr'
+            - type: 'null'
+        ipv6Address:
+          anyOf:
+            - $ref: '#/components/schemas/DeviceIpv6Address'
+            - type: 'null'
+      type: object
+      title: Device
+    DeviceIpv4Addr:
+      anyOf:
+        - $ref: '#/components/schemas/DeviceIpv4Addr1'
+        - $ref: '#/components/schemas/DeviceIpv4Addr2'
+      title: DeviceIpv4Addr
+      description: >
+        The device should be identified by either the public (observed) IP
+        address and port as seen by the application server, or the private
+        (local) and any public (observed) IP addresses in use by the device
+        (this information can be obtained by various means, for example from
+        some DNS servers).
+
+
+        If the allocated and observed IP addresses are the same (i.e. NAT is not
+        in use) then  the same address should be specified for both
+        publicAddress and privateAddress.
+
+
+        If NAT64 is in use, the device should be identified by its publicAddress
+        and publicPort, or separately by its allocated IPv6 address (field
+        ipv6Address of the Device object)
+
+
+        In all cases, publicAddress must be specified, along with at least one
+        of either privateAddress or publicPort, dependent upon which is known.
+        In general, mobile devices cannot be identified by their public IPv4
+        address alone.
+      examples:
+        - publicAddress: 203.0.113.0
+          publicPort: 59765
+    DeviceIpv4Addr1:
+      properties:
+        publicAddress:
+          $ref: '#/components/schemas/SingleIpv4Addr'
+        privateAddress:
+          $ref: '#/components/schemas/SingleIpv4Addr'
+        publicPort:
+          anyOf:
+            - $ref: '#/components/schemas/Port'
+            - type: 'null'
+      type: object
+      required:
+        - publicAddress
+        - privateAddress
+      title: DeviceIpv4Addr1
+    DeviceIpv4Addr2:
+      properties:
+        publicAddress:
+          $ref: '#/components/schemas/SingleIpv4Addr'
+        privateAddress:
+          anyOf:
+            - $ref: '#/components/schemas/SingleIpv4Addr'
+            - type: 'null'
+        publicPort:
+          $ref: '#/components/schemas/Port'
+      type: object
+      required:
+        - publicAddress
+        - publicPort
+      title: DeviceIpv4Addr2
+    DeviceIpv6Address:
+      type: string
+      format: ipv6
+      title: DeviceIpv6Address
+    ForbiddenError:
+      properties:
+        status:
+          type: integer
+          const: 403
+          title: Status
+        code:
+          type: string
+          const: PERMISSION_DENIED
+          title: Code
+        message:
+          type: string
+          const: Client does not have sufficient permissions to perform this action.
+          title: Message
+      type: object
+      required:
+        - status
+        - code
+        - message
+      title: ForbiddenError
+    LastLocationTime:
+      type: string
+      format: date-time
+      title: LastLocationTime
+      description: Last date and time when the device was localized.
+      examples:
+        - '2023-09-07T10:40:52Z'
+    Location:
+      properties:
+        lastLocationTime:
+          $ref: '#/components/schemas/LastLocationTime'
+          description: Last known location time.
+        area:
+          oneOf:
+            - $ref: '#/components/schemas/Polygon'
+            - $ref: '#/components/schemas/Circle'
+          title: Area
+          description: Geographical area of the location.
+          discriminator:
+            propertyName: areaType
+            mapping:
+              CIRCLE: '#/components/schemas/Circle'
+              POLYGON: '#/components/schemas/Polygon'
+      type: object
+      required:
+        - lastLocationTime
+        - area
+      title: Location
+    NetworkAccessIdentifier:
+      type: string
+      title: NetworkAccessIdentifier
+      description: >-
+        A public identifier addressing a subscription in a mobile network. In
+        3GPP terminology, it corresponds to the GPSI formatted with the External
+        Identifier ({Local Identifier}@{Domain Identifier}). Unlike the
+        telephone number, the network access identifier is not subjected to
+        portability ruling in force, and is individually managed by each
+        operator.
+      examples:
+        - 123456789@domain.com
+    NotFound404:
+      properties:
+        status:
+          type: integer
+          const: 404
+          title: Status
+        code:
+          type: string
+          enum:
+            - LOCATION_RETRIEVAL.DEVICE_NOT_FOUND
+            - IDENTIFIER_NOT_FOUND
+          title: Code
+        message:
+          type: string
+          enum:
+            - The location server is not able to locate the device.
+            - Device identifier not found.
+          title: Message
+      type: object
+      required:
+        - status
+        - code
+        - message
+      title: NotFound404
+    PhoneNumber:
+      type: string
+      pattern: '^\+[1-9][0-9]{4,14}$'
+      title: PhoneNumber
+      description: >-
+        A public identifier addressing a telephone subscription. In mobile
+        networks it corresponds to the MSISDN (Mobile Station International
+        Subscriber Directory Number). In order to be globally unique it has to
+        be formatted in international format, according to E.164 standard,
+        prefixed with '+'.
+      examples:
+        - '+123456789'
+    Point:
+      properties:
+        latitude:
+          type: number
+          maximum: 90
+          minimum: -90
+          title: Latitude
+          description: Latitude component of a location.
+          examples:
+            - '50.735851'
+        longitude:
+          type: number
+          maximum: 180
+          minimum: -180
+          title: Longitude
+          description: Longitude component of location.
+          examples:
+            - '7.10066'
+      type: object
+      required:
+        - latitude
+        - longitude
+      title: Point
+    PointList:
+      items:
+        $ref: '#/components/schemas/Point'
+      type: array
+      maxItems: 15
+      minItems: 3
+      title: PointList
+      description: List of points defining the area.
+    Polygon:
+      properties:
+        areaType:
+          type: string
+          const: POLYGON
+          title: Areatype
+        boundary:
+          $ref: '#/components/schemas/PointList'
+          description: List of points defining the polygon.
+      type: object
+      required:
+        - areaType
+        - boundary
+      title: Polygon
+    Port:
+      type: integer
+      maximum: 65535
+      minimum: 0
+      title: Port
+      description: TCP or UDP port number
+    RetrievalLocationRequest:
+      properties:
+        device:
+          anyOf:
+            - $ref: '#/components/schemas/Device'
+            - type: 'null'
+          description: End-user device able to connect to a mobile network.
+        maxAge:
+          anyOf:
+            - type: integer
+            - type: 'null'
+          title: Maxage
+          description: >-
+            Maximum age of the location information which is accepted for the
+            location retrieval (in seconds).
+        maxSurface:
+          anyOf:
+            - type: integer
+              minimum: 1
+            - type: 'null'
+          title: Maxsurface
+          description: >-
+            Maximum surface in square meters which is accepted by the client for
+            the location retrieval.
+          examples:
+            - 1000000
+      additionalProperties: false
+      type: object
+      title: RetrievalLocationRequest
+      description: >-
+        Request to retrieve the location of a device. Device is not required
+        when using a 3-legged access token.
+    SingleIpv4Addr:
+      type: string
+      format: ipv4
+      title: SingleIpv4Addr
+    UnauthorizedError:
+      properties:
+        status:
+          type: integer
+          const: 401
+          title: Status
+        code:
+          type: string
+          const: UNAUTHENTICATED
+          title: Code
+        message:
+          type: string
+          const: >-
+            Request not authenticated due to missing, invalid, or expired
+            credentials.
+          title: Message
+      type: object
+      required:
+        - status
+        - code
+        - message
+      title: UnauthorizedError
+    UnprocessableEntityError:
+      properties:
+        status:
+          type: integer
+          const: 422
+          title: Status
+        code:
+          type: string
+          enum:
+            - IDENTIFIER_MISMATCH
+            - SERVICE_NOT_APPLICABLE
+            - MISSING_IDENTIFIER
+            - UNSUPPORTED_IDENTIFIER
+            - UNNECESSARY_IDENTIFIER
+            - LOCATION_RETRIEVAL.UNABLE_TO_FULFILL_MAX_AGE
+            - LOCATION_RETRIEVAL.UNABLE_TO_FULFILL_MAX_SURFACE
+          title: Code
+        message:
+          type: string
+          enum:
+            - Provided identifiers are not consistent.
+            - Service is not available for the requested operation.
+            - The device cannot be identified.
+            - The identifier provided is not supported.
+            - The device is already identified by the access token.
+            - Unable to provide expected freshness for location
+            - Unable to provide accurate acceptable surface for location.
+          title: Message
+      type: object
+      required:
+        - status
+        - code
+        - message
+      title: UnprocessableEntityError
