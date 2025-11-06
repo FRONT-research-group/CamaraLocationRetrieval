@@ -1,6 +1,9 @@
 from fastapi import HTTPException
 from app.schemas.location_retrieval import BadRequestError, UnauthorizedError,ForbiddenError,NotFound404,UnprocessableEntityError
 
+
+## Core Level Exceptions
+
 class CoreHttpError(Exception):
     pass
 
@@ -9,6 +12,10 @@ class NetworkPlatformError(Exception):
 class LocationInfoNotFoundException(Exception):
     pass
 
+class CoreUnauthorizedException(Exception):
+    pass
+
+### CAMARA Exceptions
 class BadRequestException(HTTPException):
     def __init__(self, bad_request_error: BadRequestError):
         super().__init__(status_code=bad_request_error.status, detail=bad_request_error.message, headers={"code": bad_request_error.code})
