@@ -8,22 +8,23 @@ from app.dependencies import init_custom_exc_handlers
 
 settings = get_settings()
 
-logger = get_app_logger()
+logger = get_app_logger(__name__)
 logger.info("Starting CAMARA LOCATION RETRIEVAL API")
-logger.info(f"Host: {settings.host}, Port: {settings.port}")
-logger.info(f"Log Directory Path: {settings.log_directory_path}")
-logger.info(f"Log Filename Path: {settings.log_filename_path}")
-logger.info(f"Base URL: {settings.base_url}")
-logger.info(f"SCS AS ID: {settings.scs_as_id}")
-logger.info(f"Location Type: {settings.location_type}")
-logger.info(f"Notification Destination: {settings.notification_destination}")
-
+logger.info("Host: %s, Port: %s", settings.host, settings.port)
+logger.info("Log Directory Path: %s", settings.log_directory_path)
+logger.info("Log Filename Path: %s", settings.log_filename_path)
+logger.info("Base URL: %s", settings.base_url)
+logger.info("SCS AS ID: %s", settings.scs_as_id)
+logger.info("Location Type: %s", settings.location_type)
+logger.info("Notification Destination: %s", settings.notification_destination)
 
 app = FastAPI()
 
 init_custom_exc_handlers(app)
 
-app.include_router(location_retrieval.router,prefix="/location-retrieval/v0.4",tags=["Location retrieval"])
+uri_prefix: str = "/location-retrieval/v0.5"
+
+app.include_router(location_retrieval.router, prefix=uri_prefix)
 
 if __name__ == "__main__":
     import uvicorn

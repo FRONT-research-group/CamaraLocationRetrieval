@@ -22,7 +22,7 @@ from app.utils.tf_helper_for_camara_loc import (
 from app.config import get_settings
 from app.utils.errors.exception_errors import LocationInfoNotFoundException
 
-log = get_app_logger()
+log = get_app_logger(__name__)
 settings = get_settings()
 
 def retrieve_location_info(

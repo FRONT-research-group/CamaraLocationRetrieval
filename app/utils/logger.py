@@ -13,10 +13,10 @@ def check_log_path_exists() -> None:
         os.makedirs(settings.log_directory_path)
 
 
-def get_app_logger() -> logging.Logger:
+def get_app_logger(logger_name: str) -> logging.Logger:
     """Return a singleton application logger with file and stream handlers."""
     check_log_path_exists()
-    logger = logging.getLogger('local_allocation_manager')
+    logger = logging.getLogger(logger_name)
     if not logger.handlers:
         logger.setLevel(logging.DEBUG)
         formatter = logging.Formatter(
@@ -28,11 +28,17 @@ def get_app_logger() -> logging.Logger:
             maxBytes=10*1024*1024,
             backupCount=5
         )
+        
         file_handler.setLevel(logging.DEBUG)
         file_handler.setFormatter(formatter)
+        
         stream_handler = logging.StreamHandler()
         stream_handler.setLevel(logging.INFO)
         stream_handler.setFormatter(formatter)
+        
         logger.addHandler(file_handler)
         logger.addHandler(stream_handler)
+        logger.propagate = False
+        
+        return logger
     return logger

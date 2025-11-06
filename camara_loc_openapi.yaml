@@ -3,62 +3,111 @@ info:
   title: FastAPI
   version: 0.1.0
 paths:
-  /location-retrieval/v0.4/retrieve:
+  /location-retrieval/v0.5/retrieve:
     post:
       tags:
         - Location retrieval
       summary: Retrieve Location
       description: Retrieve the area where a certain user device is localized.
-      operationId: retrieve_location_location_retrieval_v0_4_retrieve_post
+      operationId: retrieve_location_location_retrieval_v0_5_retrieve_post
+      parameters:
+        - name: x-correlator
+          in: header
+          required: false
+          schema:
+            anyOf:
+              - $ref: "#/components/schemas/XCorrelator"
+              - type: "null"
+            description: Correlation id for the different services.
+            examples:
+              - b4333c46-49c0-4f62-80d7-f0ef930f1c46
+            title: X-Correlator
+          description: Correlation id for the different services.
       requestBody:
+        required: true
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/RetrievalLocationRequest'
-        required: true
+              $ref: "#/components/schemas/RetrievalLocationRequest"
       responses:
-        '200':
+        "200":
           description: Location retrieval result
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Location'
                 anyOf:
-                  - $ref: '#/components/schemas/Location'
-                  - type: 'null'
+                  - $ref: "#/components/schemas/Location"
+                  - type: "null"
                 title: >-
-                  Response Retrieve Location Location Retrieval V0 4 Retrieve
+                  Response Retrieve Location Location Retrieval V0 5 Retrieve
                   Post
-        '400':
+                $ref: "#/components/schemas/Location"
+          headers:
+            x-correlator:
+              description: Correlation id for the different services
+              schema:
+                $ref: "#/components/schemas/XCorrelator"
+              example: b4333c46-49c0-4f62-80d7-f0ef930f1c46
+        "400":
           description: Bad Request
+          headers:
+            x-correlator:
+              description: Correlation id for the different services
+              schema:
+                $ref: "#/components/schemas/XCorrelator"
+              example: b4333c46-49c0-4f62-80d7-f0ef930f1c46
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/BadRequestError'
-        '401':
+                $ref: "#/components/schemas/BadRequestError"
+        "401":
           description: Unauthorized
+          headers:
+            x-correlator:
+              description: Correlation id for the different services
+              schema:
+                $ref: "#/components/schemas/XCorrelator"
+              example: b4333c46-49c0-4f62-80d7-f0ef930f1c46
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/UnauthorizedError'
-        '403':
+                $ref: "#/components/schemas/UnauthorizedError"
+        "403":
           description: Forbidden
+          headers:
+            x-correlator:
+              description: Correlation id for the different services
+              schema:
+                $ref: "#/components/schemas/XCorrelator"
+              example: b4333c46-49c0-4f62-80d7-f0ef930f1c46
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ForbiddenError'
-        '404':
+                $ref: "#/components/schemas/ForbiddenError"
+        "404":
           description: Not Found
+          headers:
+            x-correlator:
+              description: Correlation id for the different services
+              schema:
+                $ref: "#/components/schemas/XCorrelator"
+              example: b4333c46-49c0-4f62-80d7-f0ef930f1c46
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/NotFound404'
-        '422':
+                $ref: "#/components/schemas/NotFound404"
+        "422":
           description: Unprocessable Entity
+          headers:
+            x-correlator:
+              description: Correlation id for the different services
+              schema:
+                $ref: "#/components/schemas/XCorrelator"
+              example: b4333c46-49c0-4f62-80d7-f0ef930f1c46
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/UnprocessableEntityError'
+                $ref: "#/components/schemas/UnprocessableEntityError"
 components:
   schemas:
     BadRequestError:
@@ -73,7 +122,7 @@ components:
           title: Code
         message:
           type: string
-          const: 'Client specified an invalid argument, request body or query param.'
+          const: "Client specified an invalid argument, request body or query param."
           title: Message
       type: object
       required:
@@ -88,7 +137,7 @@ components:
           const: CIRCLE
           title: Areatype
         center:
-          $ref: '#/components/schemas/Point'
+          $ref: "#/components/schemas/Point"
           description: Center point of the circle.
         radius:
           type: number
@@ -101,30 +150,80 @@ components:
         - center
         - radius
       title: Circle
-    Device:
+    Device-Input:
       properties:
         phoneNumber:
           anyOf:
-            - $ref: '#/components/schemas/PhoneNumber'
-            - type: 'null'
+            - $ref: "#/components/schemas/PhoneNumber"
+            - type: "null"
         networkAccessIdentifier:
           anyOf:
-            - $ref: '#/components/schemas/NetworkAccessIdentifier'
-            - type: 'null'
+            - $ref: "#/components/schemas/NetworkAccessIdentifier"
+            - type: "null"
         ipv4Address:
           anyOf:
-            - $ref: '#/components/schemas/DeviceIpv4Addr'
-            - type: 'null'
+            - $ref: "#/components/schemas/DeviceIpv4Addr-Input"
+            - type: "null"
         ipv6Address:
           anyOf:
-            - $ref: '#/components/schemas/DeviceIpv6Address'
-            - type: 'null'
+            - $ref: "#/components/schemas/DeviceIpv6Address"
+            - type: "null"
       type: object
       title: Device
-    DeviceIpv4Addr:
+    Device-Output:
+      properties:
+        phoneNumber:
+          anyOf:
+            - $ref: "#/components/schemas/PhoneNumber"
+            - type: "null"
+        networkAccessIdentifier:
+          anyOf:
+            - $ref: "#/components/schemas/NetworkAccessIdentifier"
+            - type: "null"
+        ipv4Address:
+          anyOf:
+            - $ref: "#/components/schemas/DeviceIpv4Addr-Output"
+            - type: "null"
+        ipv6Address:
+          anyOf:
+            - $ref: "#/components/schemas/DeviceIpv6Address"
+            - type: "null"
+      type: object
+      title: Device
+    DeviceIpv4Addr-Input:
       anyOf:
-        - $ref: '#/components/schemas/DeviceIpv4Addr1'
-        - $ref: '#/components/schemas/DeviceIpv4Addr2'
+        - $ref: "#/components/schemas/DeviceIpv4Addr1"
+        - $ref: "#/components/schemas/DeviceIpv4Addr2"
+      title: DeviceIpv4Addr
+      description: >
+        The device should be identified by either the public (observed) IP
+        address and port as seen by the application server, or the private
+        (local) and any public (observed) IP addresses in use by the device
+        (this information can be obtained by various means, for example from
+        some DNS servers).
+
+
+        If the allocated and observed IP addresses are the same (i.e. NAT is not
+        in use) then  the same address should be specified for both
+        publicAddress and privateAddress.
+
+
+        If NAT64 is in use, the device should be identified by its publicAddress
+        and publicPort, or separately by its allocated IPv6 address (field
+        ipv6Address of the Device object)
+
+
+        In all cases, publicAddress must be specified, along with at least one
+        of either privateAddress or publicPort, dependent upon which is known.
+        In general, mobile devices cannot be identified by their public IPv4
+        address alone.
+      examples:
+        - publicAddress: 203.0.113.0
+          publicPort: 59765
+    DeviceIpv4Addr-Output:
+      anyOf:
+        - $ref: "#/components/schemas/DeviceIpv4Addr1"
+        - $ref: "#/components/schemas/DeviceIpv4Addr2"
       title: DeviceIpv4Addr
       description: >
         The device should be identified by either the public (observed) IP
@@ -154,13 +253,13 @@ components:
     DeviceIpv4Addr1:
       properties:
         publicAddress:
-          $ref: '#/components/schemas/SingleIpv4Addr'
+          $ref: "#/components/schemas/SingleIpv4Addr"
         privateAddress:
-          $ref: '#/components/schemas/SingleIpv4Addr'
+          $ref: "#/components/schemas/SingleIpv4Addr"
         publicPort:
           anyOf:
-            - $ref: '#/components/schemas/Port'
-            - type: 'null'
+            - $ref: "#/components/schemas/Port"
+            - type: "null"
       type: object
       required:
         - publicAddress
@@ -169,13 +268,13 @@ components:
     DeviceIpv4Addr2:
       properties:
         publicAddress:
-          $ref: '#/components/schemas/SingleIpv4Addr'
+          $ref: "#/components/schemas/SingleIpv4Addr"
         privateAddress:
           anyOf:
-            - $ref: '#/components/schemas/SingleIpv4Addr'
-            - type: 'null'
+            - $ref: "#/components/schemas/SingleIpv4Addr"
+            - type: "null"
         publicPort:
-          $ref: '#/components/schemas/Port'
+          $ref: "#/components/schemas/Port"
       type: object
       required:
         - publicAddress
@@ -185,6 +284,14 @@ components:
       type: string
       format: ipv6
       title: DeviceIpv6Address
+    DeviceResponse:
+      anyOf:
+        - $ref: "#/components/schemas/Device-Output"
+        - type: "null"
+      title: DeviceResponse
+      description: >-
+        An identifier for the end-user equipment able to connect to the network
+        that the response refers to.
     ForbiddenError:
       properties:
         status:
@@ -211,23 +318,28 @@ components:
       title: LastLocationTime
       description: Last date and time when the device was localized.
       examples:
-        - '2023-09-07T10:40:52Z'
+        - "2023-09-07T10:40:52Z"
     Location:
       properties:
         lastLocationTime:
-          $ref: '#/components/schemas/LastLocationTime'
+          $ref: "#/components/schemas/LastLocationTime"
           description: Last known location time.
         area:
           oneOf:
-            - $ref: '#/components/schemas/Polygon'
-            - $ref: '#/components/schemas/Circle'
+            - $ref: "#/components/schemas/Polygon"
+            - $ref: "#/components/schemas/Circle"
           title: Area
           description: Geographical area of the location.
           discriminator:
             propertyName: areaType
             mapping:
-              CIRCLE: '#/components/schemas/Circle'
-              POLYGON: '#/components/schemas/Polygon'
+              CIRCLE: "#/components/schemas/Circle"
+              POLYGON: "#/components/schemas/Polygon"
+        device:
+          $ref: "#/components/schemas/DeviceResponse"
+          description: >-
+            Device information identifier corresponding to the location
+            retrieval request.
       type: object
       required:
         - lastLocationTime
@@ -253,15 +365,11 @@ components:
           title: Status
         code:
           type: string
-          enum:
-            - LOCATION_RETRIEVAL.DEVICE_NOT_FOUND
-            - IDENTIFIER_NOT_FOUND
+          const: IDENTIFIER_NOT_FOUND
           title: Code
         message:
           type: string
-          enum:
-            - The location server is not able to locate the device.
-            - Device identifier not found.
+          const: Device identifier not found.
           title: Message
       type: object
       required:
@@ -280,7 +388,7 @@ components:
         be formatted in international format, according to E.164 standard,
         prefixed with '+'.
       examples:
-        - '+123456789'
+        - "+123456789"
     Point:
       properties:
         latitude:
@@ -290,7 +398,7 @@ components:
           title: Latitude
           description: Latitude component of a location.
           examples:
-            - '50.735851'
+            - "50.735851"
         longitude:
           type: number
           maximum: 180
@@ -298,7 +406,7 @@ components:
           title: Longitude
           description: Longitude component of location.
           examples:
-            - '7.10066'
+            - "7.10066"
       type: object
       required:
         - latitude
@@ -306,7 +414,7 @@ components:
       title: Point
     PointList:
       items:
-        $ref: '#/components/schemas/Point'
+        $ref: "#/components/schemas/Point"
       type: array
       maxItems: 15
       minItems: 3
@@ -319,7 +427,7 @@ components:
           const: POLYGON
           title: Areatype
         boundary:
-          $ref: '#/components/schemas/PointList'
+          $ref: "#/components/schemas/PointList"
           description: List of points defining the polygon.
       type: object
       required:
@@ -336,13 +444,13 @@ components:
       properties:
         device:
           anyOf:
-            - $ref: '#/components/schemas/Device'
-            - type: 'null'
+            - $ref: "#/components/schemas/Device-Input"
+            - type: "null"
           description: End-user device able to connect to a mobile network.
         maxAge:
           anyOf:
             - type: integer
-            - type: 'null'
+            - type: "null"
           title: Maxage
           description: >-
             Maximum age of the location information which is accepted for the
@@ -351,7 +459,7 @@ components:
           anyOf:
             - type: integer
               minimum: 1
-            - type: 'null'
+            - type: "null"
           title: Maxsurface
           description: >-
             Maximum surface in square meters which is accepted by the client for
@@ -399,7 +507,6 @@ components:
         code:
           type: string
           enum:
-            - IDENTIFIER_MISMATCH
             - SERVICE_NOT_APPLICABLE
             - MISSING_IDENTIFIER
             - UNSUPPORTED_IDENTIFIER
@@ -410,8 +517,7 @@ components:
         message:
           type: string
           enum:
-            - Provided identifiers are not consistent.
-            - Service is not available for the requested operation.
+            - Service is not available for the provided identifier.
             - The device cannot be identified.
             - The identifier provided is not supported.
             - The device is already identified by the access token.
@@ -424,3 +530,9 @@ components:
         - code
         - message
       title: UnprocessableEntityError
+    XCorrelator:
+      type: string
+      pattern: '^[a-zA-Z0-9-_:;.\/<>{}]{0,256}$'
+      title: XCorrelator
+      description: Correlation id for the different services
+      example: b4333c46-49c0-4f62-80d7-f0ef930f1c46
