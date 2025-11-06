@@ -42,5 +42,24 @@ This project is licensed under the [Apache License 2.0](https://github.com/FRONT
 ## Contact
 For questions or support, contact: p.pavlidis@iit.demokritos.gr
 
+---
 
+# Sequence Diagram
+```mermaid
+%%{config: { 'fontSize': '150px' }}%%
+sequenceDiagram
+   participant User as User / API Consumer / vAPP
+   box lightgreen CAMARA Device Location API
+      participant CAMARA as CAMARA Device Location API
+      participant Transform as Transformation Function (TF) (CAMARA ↔ 3GPP)
+   end
+   participant NEF as NEF MonitoringEvent API (5G Core)
+   
+   User->>CAMARA: 1. CAMARA POST Request (Get Last Known Location)
+   CAMARA->>Transform: 2. Delegate request for transformation
+   CAMARA->>NEF: 3. HTTP POST (MonitoringEvent request via TF)
+   NEF-->>CAMARA: 4. Response (Last Known Location Area via TF)
+   Transform->>CAMARA: 5. Pass NEF response after mapping to CAMARA
+   CAMARA-->>User: 6. CAMARA POST Response (Last Known Location Area)
+```
 
