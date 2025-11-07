@@ -28,6 +28,9 @@ The CAMARA API acts as an intermediary between application clients and the **3GP
 
 5. The **TF** maps 3GPP response data back into **CAMARA-compatible** data types and returns it to the requesting client.
 
+> [!NOTE]  
+> NEF refers to 3GPP implementation that FRONT Research Group has been developed. You can find more info [here](https://github.com/FRONT-research-group/NEF/tree/integrate_provider_onboarding).
+
 ---
 
 ## ⚙️ Architecture Components
