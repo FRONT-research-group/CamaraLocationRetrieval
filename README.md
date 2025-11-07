@@ -119,7 +119,7 @@ curl -X POST https://<api-host>/location-retrieval/v0.5/retrieve
 ```
 
 ## API Documentation
-The **Camara Location Retrieval API** is documented in the [openAPI spec](https://github.com/FRONT-research-group/CamaraLocationRetrieval/blob/main/location_retrieval_openapi.yaml).\
+The **Camara Location Retrieval API** is documented in the [openAPI spec](https://github.com/FRONT-research-group/CamaraLocationRetrieval/blob/main/camara_loc_openapi.yaml).\
 Supported Error Types: 
 - 400 BAD REQUEST
 - 401 Unauthorized (encapsulates the CAMARA - NEF Communication)
