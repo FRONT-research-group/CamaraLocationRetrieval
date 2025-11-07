@@ -117,7 +117,13 @@ curl -X POST https://<api-host>/location-retrieval/v0.5/retrieve
 
 ## API Documentation
 The **Camara Location Retrieval API** is documented in the [openAPI spec](https://github.com/FRONT-research-group/CamaraLocationRetrieval/blob/main/location_retrieval_openapi.yaml).\
-Supported Error Types: 400 BAD REQUEST, 404 DEVICE IDENTIFIER NOT FOUND
+Supported Error Types: 
+- 400 BAD REQUEST
+- 401 Unauthorized (encapsulates the CAMARA - NEF Communication)
+- 403 Forbidden
+- 404 Not Found
+- 422 Validation Error
+- 500 Internal Server Error
 
 ---
 
@@ -139,6 +145,18 @@ sequenceDiagram
    Transform->>CAMARA: 5. Pass NEF response after mapping to CAMARA
    CAMARA-->>User: 6. CAMARA POST Response (Last Known Location Area)
 ```
+
+1. The process is initiated by an API consumer(vAPP) issuing a HTTP POST request to the CAMARA Device Location - Location Retrieval API to obtain the last known location area of a target device. 
+
+2. In the Location Retrieval API, a Transformation Function (TF) is used internally to handle protocol and payload adaptation. This function translates the CAMARA - compliant request into the required 3GPP - compliant MonitoringEvent request body. 
+
+3. CAMARA API issues a HTTP POST request to the NEF MonitoringEvent API with the translated 3GPP compliant request body. 
+
+4. The NEF processes this request by querying its subscriber database and, if the device is found, returns the corresponding last known location area. 
+
+5. The response is then passed back into the CAMARA TF, where the 3GPP payload is transformed into the standardized CAMARA response schema. 
+
+6. Finally, the CAMARA API delivers the response data via HTTP response to the consumer. 
 
 ## Contribution
 Contributions are welcome! Please open issues or submit pull requests for improvements.
