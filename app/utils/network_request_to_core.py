@@ -18,7 +18,7 @@ def _make_request(method: str, url: str, data=None):
             headers = {
                 "Content-Type": APPLICATION_JSON,
                 "accept": APPLICATION_JSON,
-                "Authorization": "Bearer " + jwt_token + "1"
+                "Authorization": "Bearer " + jwt_token
             }
         elif method == "GET":
             headers = {

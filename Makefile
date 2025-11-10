@@ -6,11 +6,24 @@ ifneq (,$(wildcard .env))
   export
 endif
 
+CONF_EXT_NETWORK := ./conf_external_network.sh
+REMOVE_EXT_NETWORK := ./remove_external_network.sh
 DOCKER_COMPOSE := docker compose
 
-.PHONY:  deploy  deploy-no-auth  undeploy-no-auth  clean  clean-no-auth
+.PHONY:  deploy  deploy-no-auth  undeploy-no-auth  clean  clean-no-auth create-external-network  remove-external-network
 
-deploy:
+conf-ext-network:
+	@echo ">>> Running script for configuring external network..."
+	$(CONF_EXT_NETWORK)
+	@echo ">>> Script finished."
+
+remove-ext-network:
+	@echo "Running script for removing external network..."
+	$(REMOVE_EXT_NETWORK)
+	@echo "Script finished."
+
+
+deploy: conf-ext-network
 	@echo "Running deployment setup..."
 	$(DOCKER_COMPOSE) -f docker-compose.yaml up --build -d
 	@echo "Deployment complete."
@@ -20,5 +33,5 @@ undeploy:
 	$(DOCKER_COMPOSE) -f docker-compose.yaml down
 	@echo "Undeployment complete."
 
-clean: undeploy
+clean: undeploy remove-ext-network
 	@echo "Cleanup complete."

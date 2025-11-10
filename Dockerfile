@@ -4,8 +4,6 @@ WORKDIR /
 
 COPY requirements.txt ./app/
 
-#COPY outbound-cert-2024.crt /usr/local/share/ca-certificates
-
 #TODO change root as user, security hardening
 RUN apt-get update && apt-get upgrade -y && apt-get clean \
     && update-ca-certificates && rm -rf /var/lib/apt/lists/* \

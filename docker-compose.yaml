@@ -8,3 +8,9 @@ services:
     env_file: .env
     restart: no
     command: ["--host", "${HOST}", "--port", "${PORT}"]
+    networks:
+      - shared
+
+networks:
+  shared:
+    external: true
