@@ -5,8 +5,10 @@ from pydantic import BaseModel
 from app.utils.errors.exception_errors import CoreHttpError, LocationInfoNotFoundException, NetworkPlatformError, CoreUnauthorizedException
 from app.utils.logger import get_app_logger
 from app.invoker_onboarding.invoker_capif_connector import onboard_invoker
+from app.config import get_settings
 
 log = get_app_logger(__name__)
+settings = get_settings()
 
 APPLICATION_JSON = "application/json"
 
@@ -51,7 +53,10 @@ def monitoring_event_post_request(
         raise NetworkPlatformError("Failed to post monitoring event") from exc
 
 def _monitoring_event_build_url(base_url: str, scs_as_id: str, session_id: str = None):
-    url = f"{base_url}/3gpp-monitoring-event/v1/{scs_as_id}/subscriptions"
+    if settings.project_api_name is None or settings.project_api_name == "":
+        url = f"{base_url}/3gpp-monitoring-event/v1/{scs_as_id}/subscriptions"
+    else:
+        url= f"{base_url}" + "/3gpp-monitoring-event-" + settings.project_api_name + "/v1/"+ f"{scs_as_id}/subscriptions"
     if session_id is not None and len(session_id) > 0:
         return f"{url}/{session_id}"
     else:

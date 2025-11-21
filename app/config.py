@@ -11,6 +11,7 @@ class Settings(BaseSettings):
     scs_as_id: str = "1"
     location_type: str = "last_known" #last_known or current_location
     notification_destination: str | None = "http://127.0.0.1:8001"
+    project_api_name: str | None = None
 
     model_config = SettingsConfigDict(env_ignore_empty=True)
 
